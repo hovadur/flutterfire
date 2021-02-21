@@ -13,7 +13,6 @@ import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
 
 import 'colors.dart';
 import 'scanner_utils.dart';
@@ -282,27 +281,17 @@ class _MaterialBarcodeScannerState extends State<MaterialBarcodeScanner>
   }
 
   Future<void> _takePicture() async {
-    final Directory extDir = await getApplicationDocumentsDirectory();
-
-    final String dirPath = '${extDir.path}/Pictures/barcodePics';
-    await Directory(dirPath).create(recursive: true);
-
-    final String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-
-    final String filePath = '$dirPath/$timestamp.jpg';
-
     try {
-      await _cameraController.takePicture(filePath);
+      final file = await _cameraController.takePicture();
+      setState(() {
+        _barcodePictureFilePath = file.path;
+      });
     } on CameraException catch (e) {
       print(e);
     }
 
     _cameraController.dispose();
     _cameraController = null;
-
-    setState(() {
-      _barcodePictureFilePath = filePath;
-    });
   }
 
   Widget _buildCameraPreview() {
