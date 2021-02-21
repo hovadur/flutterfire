@@ -1,14 +1,12 @@
-// @dart=2.9
-
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:e2e/e2e.dart';
+import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:firebase_ml_vision/firebase_ml_vision.dart';
-import 'package:e2e/e2e.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 
 void main() {
   E2EWidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +18,7 @@ void main() {
         FirebaseVisionImage.fromFilePath(tmpFilename);
 
     bool waitingOnModels = true;
-    VisionText text;
+    late VisionText text;
     while (waitingOnModels) {
       try {
         text = await FirebaseVision.instance
@@ -28,7 +26,7 @@ void main() {
             .processImage(visionImage);
         waitingOnModels = false;
       } on PlatformException catch (exception) {
-        if (!exception.message.contains('model to be downloaded')) {
+        if (exception.message?.contains('model to be downloaded') == false) {
           rethrow;
         }
       }
@@ -45,10 +43,10 @@ void main() {
 // Since there is no way to get the full asset filename, this method loads the
 // image into a temporary file.
 Future<String> _loadImage(String assetFilename) async {
-  final Directory directory = await getTemporaryDirectory();
+  final Directory? directory = await getTemporaryDirectory();
 
   final String tmpFilename = path.join(
-    directory.path,
+    directory?.path ?? '',
     "tmp.jpg",
   );
 

@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// @dart=2.9
-
 part of firebase_ml_vision;
 
 /// Option for controlling additional trade-offs in performing face detection.
@@ -71,8 +69,7 @@ class FaceDetector {
     assert(!_isClosed);
 
     _hasBeenOpened = true;
-    final List<dynamic> reply =
-        await FirebaseVision.channel.invokeListMethod<dynamic>(
+    final reply = await FirebaseVision.channel.invokeListMethod<dynamic>(
       'FaceDetector#processImage',
       <String, dynamic>{
         'handle': _handle,
@@ -88,7 +85,7 @@ class FaceDetector {
     );
 
     final List<Face> faces = <Face>[];
-    for (dynamic data in reply) {
+    for (dynamic data in reply ?? {}) {
       faces.add(Face._(data));
     }
 
@@ -169,10 +166,10 @@ class Face {
         rightEyeOpenProbability = data['rightEyeOpenProbability'],
         smilingProbability = data['smilingProbability'],
         trackingId = data['trackingId'],
-        _landmarks = Map<FaceLandmarkType, FaceLandmark>.fromIterables(
+        _landmarks = Map<FaceLandmarkType, FaceLandmark?>.fromIterables(
             FaceLandmarkType.values,
             FaceLandmarkType.values.map((FaceLandmarkType type) {
-          final List<dynamic> pos = data['landmarks'][_enumToString(type)];
+          final pos = data['landmarks'][_enumToString(type)];
           return (pos == null)
               ? null
               : FaceLandmark._(
@@ -180,7 +177,7 @@ class Face {
                   Offset(pos[0], pos[1]),
                 );
         })),
-        _contours = Map<FaceContourType, FaceContour>.fromIterables(
+        _contours = Map<FaceContourType, FaceContour?>.fromIterables(
             FaceContourType.values,
             FaceContourType.values.map((FaceContourType type) {
           /// added empty map to pass the tests
@@ -196,8 +193,8 @@ class Face {
                 );
         }));
 
-  final Map<FaceLandmarkType, FaceLandmark> _landmarks;
-  final Map<FaceContourType, FaceContour> _contours;
+  final Map<FaceLandmarkType, FaceLandmark?> _landmarks;
+  final Map<FaceContourType, FaceContour?> _contours;
 
   /// The axis-aligned bounding rectangle of the detected face.
   ///
@@ -252,12 +249,12 @@ class Face {
   /// Gets the landmark based on the provided [FaceLandmarkType].
   ///
   /// Null if landmark was not detected.
-  FaceLandmark getLandmark(FaceLandmarkType landmark) => _landmarks[landmark];
+  FaceLandmark? getLandmark(FaceLandmarkType landmark) => _landmarks[landmark];
 
   /// Gets the contour based on the provided [FaceContourType].
   ///
   /// Null if contour was not detected.
-  FaceContour getContour(FaceContourType contour) => _contours[contour];
+  FaceContour? getContour(FaceContourType contour) => _contours[contour];
 }
 
 /// Represent a face landmark.

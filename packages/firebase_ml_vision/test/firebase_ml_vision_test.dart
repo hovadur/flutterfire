@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// @dart=2.9
-
 import 'dart:typed_data';
 import 'dart:ui';
 
@@ -97,9 +95,9 @@ void main() {
     });
 
     group('$BarcodeDetector', () {
-      BarcodeDetector detector;
-      FirebaseVisionImage image;
-      List<dynamic> returnBarcodes;
+      late BarcodeDetector detector;
+      late FirebaseVisionImage image;
+      late List<dynamic> returnBarcodes;
 
       setUp(() {
         detector = FirebaseVision.instance.barcodeDetector();
@@ -172,10 +170,10 @@ void main() {
 
         final Barcode barcode = barcodes[0];
         expect(barcode.valueType, BarcodeValueType.email);
-        expect(barcode.email.address, 'a');
-        expect(barcode.email.body, 'b');
-        expect(barcode.email.subject, 's');
-        expect(barcode.email.type, BarcodeEmailType.home);
+        expect(barcode.email?.address, 'a');
+        expect(barcode.email?.body, 'b');
+        expect(barcode.email?.subject, 's');
+        expect(barcode.email?.type, BarcodeEmailType.home);
       });
 
       test('detectInImage phone', () async {
@@ -192,8 +190,8 @@ void main() {
 
         final Barcode barcode = barcodes[0];
         expect(barcode.valueType, BarcodeValueType.phone);
-        expect(barcode.phone.number, '000');
-        expect(barcode.phone.type, BarcodePhoneType.fax);
+        expect(barcode.phone?.number, '000');
+        expect(barcode.phone?.type, BarcodePhoneType.fax);
       });
 
       test('detectInImage sms', () async {
@@ -210,8 +208,8 @@ void main() {
 
         final Barcode barcode = barcodes[0];
         expect(barcode.valueType, BarcodeValueType.sms);
-        expect(barcode.sms.phoneNumber, '000');
-        expect(barcode.sms.message, 'm');
+        expect(barcode.sms?.phoneNumber, '000');
+        expect(barcode.sms?.message, 'm');
       });
 
       test('detectInImage url', () async {
@@ -228,8 +226,8 @@ void main() {
 
         final Barcode barcode = barcodes[0];
         expect(barcode.valueType, BarcodeValueType.url);
-        expect(barcode.url.title, 't');
-        expect(barcode.url.url, 'u');
+        expect(barcode.url?.title, 't');
+        expect(barcode.url?.url, 'u');
       });
 
       test('detectInImage wifi', () async {
@@ -247,9 +245,9 @@ void main() {
 
         final Barcode barcode = barcodes[0];
         expect(barcode.valueType, BarcodeValueType.wifi);
-        expect(barcode.wifi.ssid, 's');
-        expect(barcode.wifi.password, 'p');
-        expect(barcode.wifi.encryptionType, BarcodeWiFiEncryptionType.wep);
+        expect(barcode.wifi?.ssid, 's');
+        expect(barcode.wifi?.password, 'p');
+        expect(barcode.wifi?.encryptionType, BarcodeWiFiEncryptionType.wep);
       });
 
       test('detectInImage geoPoint', () async {
@@ -267,8 +265,8 @@ void main() {
 
         final Barcode barcode = barcodes[0];
         expect(barcode.valueType, BarcodeValueType.geographicCoordinates);
-        expect(barcode.geoPoint.latitude, 0.2);
-        expect(barcode.geoPoint.longitude, 0.3);
+        expect(barcode.geoPoint?.latitude, 0.2);
+        expect(barcode.geoPoint?.longitude, 0.3);
       });
 
       test('detectInImage contactInfo', () async {
@@ -315,24 +313,25 @@ void main() {
 
         final Barcode barcode = barcodes[0];
         expect(barcode.valueType, BarcodeValueType.contactInfo);
-        expect(barcode.contactInfo.addresses[0].type, BarcodeAddressType.work);
-        expect(barcode.contactInfo.addresses[0].addressLines[0], 'al');
-        expect(barcode.contactInfo.emails[0].type, BarcodeEmailType.home);
-        expect(barcode.contactInfo.emails[0].address, 'a');
-        expect(barcode.contactInfo.emails[0].body, 'b');
-        expect(barcode.contactInfo.emails[0].subject, 's');
-        expect(barcode.contactInfo.name.first, 'f');
-        expect(barcode.contactInfo.name.last, 'l');
-        expect(barcode.contactInfo.name.middle, 'm');
-        expect(barcode.contactInfo.name.formattedName, 'fn');
-        expect(barcode.contactInfo.name.prefix, 'p');
-        expect(barcode.contactInfo.name.suffix, 's');
-        expect(barcode.contactInfo.name.pronunciation, 'pn');
-        expect(barcode.contactInfo.phones[0].type, BarcodePhoneType.mobile);
-        expect(barcode.contactInfo.phones[0].number, '012');
-        expect(barcode.contactInfo.urls[0], 'url');
-        expect(barcode.contactInfo.jobTitle, 'j');
-        expect(barcode.contactInfo.organization, 'o');
+        expect(
+            barcode.contactInfo?.addresses?[0].type, BarcodeAddressType.work);
+        expect(barcode.contactInfo?.addresses?[0].addressLines[0], 'al');
+        expect(barcode.contactInfo?.emails?[0].type, BarcodeEmailType.home);
+        expect(barcode.contactInfo?.emails?[0].address, 'a');
+        expect(barcode.contactInfo?.emails?[0].body, 'b');
+        expect(barcode.contactInfo?.emails?[0].subject, 's');
+        expect(barcode.contactInfo?.name?.first, 'f');
+        expect(barcode.contactInfo?.name?.last, 'l');
+        expect(barcode.contactInfo?.name?.middle, 'm');
+        expect(barcode.contactInfo?.name?.formattedName, 'fn');
+        expect(barcode.contactInfo?.name?.prefix, 'p');
+        expect(barcode.contactInfo?.name?.suffix, 's');
+        expect(barcode.contactInfo?.name?.pronunciation, 'pn');
+        expect(barcode.contactInfo?.phones?[0].type, BarcodePhoneType.mobile);
+        expect(barcode.contactInfo?.phones?[0].number, '012');
+        expect(barcode.contactInfo?.urls?[0], 'url');
+        expect(barcode.contactInfo?.jobTitle, 'j');
+        expect(barcode.contactInfo?.organization, 'o');
       });
 
       test('detectInImage calendarEvent', () async {
@@ -354,14 +353,15 @@ void main() {
 
         final Barcode barcode = barcodes[0];
         expect(barcode.valueType, BarcodeValueType.calendarEvent);
-        expect(barcode.calendarEvent.eventDescription, 'e');
-        expect(barcode.calendarEvent.location, 'l');
-        expect(barcode.calendarEvent.organizer, 'o');
-        expect(barcode.calendarEvent.status, 'st');
-        expect(barcode.calendarEvent.summary, 'sm');
+        expect(barcode.calendarEvent?.eventDescription, 'e');
+        expect(barcode.calendarEvent?.location, 'l');
+        expect(barcode.calendarEvent?.organizer, 'o');
+        expect(barcode.calendarEvent?.status, 'st');
+        expect(barcode.calendarEvent?.summary, 'sm');
+        expect(barcode.calendarEvent?.start,
+            DateTime(2017, 7, 4, 12, 34, 56, 123));
         expect(
-            barcode.calendarEvent.start, DateTime(2017, 7, 4, 12, 34, 56, 123));
-        expect(barcode.calendarEvent.end, DateTime(2018, 8, 5, 1, 23, 45, 456));
+            barcode.calendarEvent?.end, DateTime(2018, 8, 5, 1, 23, 45, 456));
       });
 
       test('detectInImage driversLicense', () async {
@@ -390,20 +390,20 @@ void main() {
 
         final Barcode barcode = barcodes[0];
         expect(barcode.valueType, BarcodeValueType.driverLicense);
-        expect(barcode.driverLicense.firstName, 'fn');
-        expect(barcode.driverLicense.middleName, 'mn');
-        expect(barcode.driverLicense.lastName, 'ln');
-        expect(barcode.driverLicense.gender, 'g');
-        expect(barcode.driverLicense.addressCity, 'ac');
-        expect(barcode.driverLicense.addressState, 'a');
-        expect(barcode.driverLicense.addressStreet, 'st');
-        expect(barcode.driverLicense.addressZip, 'az');
-        expect(barcode.driverLicense.birthDate, 'bd');
-        expect(barcode.driverLicense.documentType, 'dt');
-        expect(barcode.driverLicense.licenseNumber, 'l');
-        expect(barcode.driverLicense.expiryDate, 'ed');
-        expect(barcode.driverLicense.issuingDate, 'id');
-        expect(barcode.driverLicense.issuingCountry, 'ic');
+        expect(barcode.driverLicense?.firstName, 'fn');
+        expect(barcode.driverLicense?.middleName, 'mn');
+        expect(barcode.driverLicense?.lastName, 'ln');
+        expect(barcode.driverLicense?.gender, 'g');
+        expect(barcode.driverLicense?.addressCity, 'ac');
+        expect(barcode.driverLicense?.addressState, 'a');
+        expect(barcode.driverLicense?.addressStreet, 'st');
+        expect(barcode.driverLicense?.addressZip, 'az');
+        expect(barcode.driverLicense?.birthDate, 'bd');
+        expect(barcode.driverLicense?.documentType, 'dt');
+        expect(barcode.driverLicense?.licenseNumber, 'l');
+        expect(barcode.driverLicense?.expiryDate, 'ed');
+        expect(barcode.driverLicense?.issuingDate, 'id');
+        expect(barcode.driverLicense?.issuingCountry, 'ic');
       });
 
       test('detectInImage no blocks', () async {
@@ -503,7 +503,7 @@ void main() {
     });
 
     group('$FaceDetector', () {
-      List<dynamic> testFaces;
+      late List<dynamic> testFaces;
 
       setUp(() {
         testFaces = <dynamic>[
@@ -645,11 +645,11 @@ void main() {
         expect(face.trackingId, 8);
 
         for (FaceLandmarkType type in FaceLandmarkType.values) {
-          expect(face.getLandmark(type).type, type);
+          expect(face.getLandmark(type)?.type, type);
         }
 
-        Offset p(FaceLandmarkType type) {
-          return face.getLandmark(type).position;
+        Offset? p(FaceLandmarkType type) {
+          return face.getLandmark(type)?.position;
         }
 
         expect(p(FaceLandmarkType.bottomMouth), const Offset(0.1, 1.1));
@@ -663,8 +663,8 @@ void main() {
         expect(p(FaceLandmarkType.rightEye), const Offset(16.1, 17.1));
         expect(p(FaceLandmarkType.rightMouth), const Offset(18.1, 19.1));
 
-        List<Offset> c(FaceContourType type) {
-          return face.getContour(type).positionsList;
+        List<Offset>? c(FaceContourType type) {
+          return face.getContour(type)?.positionsList;
         }
 
         expect(
@@ -771,7 +771,7 @@ void main() {
     });
 
     group('$TextRecognizer', () {
-      TextRecognizer recognizer;
+      late TextRecognizer recognizer;
       final FirebaseVisionImage image = FirebaseVisionImage.fromFilePath(
         'empty',
       );
@@ -1058,7 +1058,7 @@ void main() {
     });
 
     group('Cloud $TextRecognizer', () {
-      TextRecognizer recognizer;
+      late TextRecognizer recognizer;
       final image = FirebaseVisionImage.fromFilePath(
         'empty',
       );
@@ -1382,20 +1382,6 @@ void main() {
         expect(recognizer.close(), completes);
 
         expect(log, <Matcher>[]);
-      });
-
-      test('when given wrong input on processing an image fails', () async {
-        expect(
-            () => recognizer.processImage(null),
-            throwsA(isA<AssertionError>().having((e) => e.toString(), 'message',
-                contains("'visionImage != null': is not true"))));
-      });
-
-      test('when given wrong null options', () async {
-        expect(
-            () => recognizer.processImage(null),
-            throwsA(isA<AssertionError>().having((e) => e.toString(), 'message',
-                contains("'visionImage != null': is not true"))));
       });
 
       group('throws an exception when native API fails to', () {
